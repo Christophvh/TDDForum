@@ -5,7 +5,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('threads','ThreadController');
+Route::resource('threads','ThreadsController');
+Route::resource('threads.replies','RepliesController');
 
 Auth::routes();
 

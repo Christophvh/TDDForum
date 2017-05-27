@@ -8,6 +8,15 @@ class Reply extends Model
 {
 
     /**
+     * The fields that may be mass assigned
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'body', 'user_id',
+    ];
+
+    /**
      * RELATIONSHIPS
      */
 
@@ -19,5 +28,15 @@ class Reply extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * A reply belongs to a thread
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
     }
 }
