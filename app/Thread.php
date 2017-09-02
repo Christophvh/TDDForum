@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     protected $fillable = [
-        'title', 'body', 'user_id'
+        'title', 'body', 'user_id', 'channel_id'
     ];
     /**
      * RELATIONSHIPS
@@ -29,6 +29,16 @@ class Thread extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+	/**
+	 * A Thread belongs to a channel
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+    public function channel()
+    {
+    	return $this->belongsTo(Channel::class);
     }
 
     /**

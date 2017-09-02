@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
+use App\Http\Requests\StoreRepliesRequest;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -15,16 +17,18 @@ class RepliesController extends Controller
     {
         $this->middleware('auth');
     }
-
-
-    /**
-     * Store a reply in storage
-     *
-     * @param Request $request
-     * @param Thread $thread
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request, Thread $thread){
+	
+	
+	/**
+	 * Store a reply in storage
+	 *
+	 * @param StoreRepliesRequest|Request $request
+	 * @param Channel $channel
+	 * @param Thread $thread
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+    public function store(StoreRepliesRequest $request, Channel $channel, Thread $thread){
 
         $thread->addReply([
             'body' => $request->body,

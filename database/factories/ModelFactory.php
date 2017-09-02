@@ -12,41 +12,55 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\User::class, function (Faker\Generator $faker) {
-    static $password;
+$factory->define( App\User::class, function ( Faker\Generator $faker ) {
+	static $password;
 
-    return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
-    ];
-});
+	return [
+		'name'           => $faker->name,
+		'email'          => $faker->unique()->safeEmail,
+		'password'       => $password ?: $password = bcrypt( 'secret' ),
+		'remember_token' => str_random( 10 ),
+	];
+} );
 
 /**
  *  Thread Factory
  */
-$factory->define(App\Thread::class, function (Faker\Generator $faker) {
-    return [
-        'title' => $faker->sentence(),
-        'body' => $faker->paragraph(),
-        'user_id' => function () {
-            return factory('App\User')->create()->id;
-        }
-    ];
-});
+$factory->define( App\Thread::class, function ( Faker\Generator $faker ) {
+	return [
+		'title'      => $faker->sentence(),
+		'body'       => $faker->paragraph(),
+		'user_id'    => function () {
+			return factory( 'App\User' )->create()->id;
+		},
+		'channel_id' => function () {
+			return factory( 'App\Channel' )->create()->id;
+		},
+	];
+} );
+
+/**
+ *  Channel Factory
+ */
+$factory->define( App\Channel::class, function ( Faker\Generator $faker ) {
+	return [
+		'name' => $faker->word,
+		'slug' => $faker->slug(3),
+
+		];
+} );
 
 /**
  * Replies Factory
  */
-$factory->define(App\Reply::class, function (Faker\Generator $faker) {
-    return [
-        'body' => $faker->paragraph(),
-        'user_id' => function () {
-            return factory('App\User')->create()->id;
-        },
-        'thread_id' => function() {
-            return factory('App\Thread')->create()->id;
-        }
-    ];
-});
+$factory->define( App\Reply::class, function ( Faker\Generator $faker ) {
+	return [
+		'body'      => $faker->paragraph(),
+		'user_id'   => function () {
+			return factory( 'App\User' )->create()->id;
+		},
+		'thread_id' => function () {
+			return factory( 'App\Thread' )->create()->id;
+		},
+	];
+} );
