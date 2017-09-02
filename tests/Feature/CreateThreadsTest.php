@@ -7,18 +7,28 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CreateThreadsTest extends TestCase
-{
-    use DatabaseMigrations;
+class CreateThreadsTest extends TestCase {
 
-    /** @test */
-    function an_authenticated_user_can_create_new_forum_threads()
-    {
-        $this->actingAs(factory('App\User')->create());
+	use DatabaseMigrations;
 
-        $thread = factory('App\Thread')->make();
-        $this->post('/threads', $thread->toArray());
+	/** @test */
+	function a_guest_cant_create_new_forum_threads()
+	{
 
-        $this->get('/threads/' . $thread->id)->assertSee($thread->title)->assertSee($thread->body);
-    }
+		$this->expectException( 'Illuminate\Auth\AuthenticationException' );
+		$thread = make( 'App\Thread' );
+		$this->post( '/threads', $thread->toArray() );
+
+	}
+
+	/** @test */
+	function an_authenticated_user_can_create_new_forum_threads()
+	{
+		$this->actingAs( create( 'App\User' ));
+
+		$thread = make( 'App\Thread' );
+		$this->post( '/threads', $thread->toArray() );
+
+		$this->get( '/threads/' . $thread->id )->assertSee( $thread->title )->assertSee( $thread->body );
+	}
 }
