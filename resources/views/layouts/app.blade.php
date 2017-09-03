@@ -44,7 +44,24 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{action('ThreadsController@index', null)}}">All Threads</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">Browse <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ action('ThreadsController@index',null) }}">
+                                    All Threads
+                                </a>
+                            </li>
+                            @if(auth()->check())
+                                <li>
+                                    <a href="{{ action('ThreadsController@index', ['channel' => null, 'by' => auth()->user()->name]) }}">
+                                        My Threads
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
                     <li>
                         <a href="{{ action('ThreadsController@create') }}">New Thread</a>
                     </li>
@@ -52,7 +69,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">Channels <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            @foreach(App\Channel::all() as $channel)
+                            @foreach($channels as $channel)
                                 <li>
                                     <a href="{{ action('ThreadsController@index', $channel) }}">
                                         {{ $channel->name }}
