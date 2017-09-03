@@ -64,13 +64,11 @@ class ThreadsController extends Controller
 			]
 		);
 		
-		$thread->creator()
-		       ->associate(auth()->id());
-		$thread->channel()
-		       ->associate($request->input('channel_id'));
+		$thread->creator()->associate(auth()->id());
+		$thread->channel()->associate($request->input('channel_id'));
 		$thread->save();
 		
-		return redirect(action('ThreadsController@show', $thread->id));
+		return redirect(action('ThreadsController@show', [$thread->channel, $thread->id]));
 	}
 	
 	/**
