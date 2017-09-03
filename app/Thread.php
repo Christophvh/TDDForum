@@ -11,6 +11,19 @@ class Thread extends Model
 		'title', 'body', 'user_id', 'channel_id',
 	];
 	
+	
+	/**
+	 * Add a the replies count to every thread query, Global Scope
+	 */
+	protected static function boot()
+	{
+		parent::boot();
+		
+		static::addGlobalScope('replyCount', function($builder) {
+			$builder->withCount('replies');
+		});
+	}
+	
 	/**
 	 * RELATIONSHIPS
 	 * /**
@@ -69,4 +82,5 @@ class Thread extends Model
 	{
 		return $filters->apply($query);
 	}
+	
 }
