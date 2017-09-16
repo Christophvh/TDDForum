@@ -11,6 +11,8 @@ class Thread extends Model
 		'title', 'body', 'user_id', 'channel_id',
 	];
 	
+	protected $with = ['creator', 'channel'];
+	
 	
 	/**
 	 * Add a the replies count to every thread query, Global Scope

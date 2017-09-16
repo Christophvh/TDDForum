@@ -2,11 +2,12 @@
 
 namespace App;
 
+use App\Traits\Favoritable;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-
+	use Favoritable;
     /**
      * The fields that may be mass assigned
      *
@@ -15,6 +16,8 @@ class Reply extends Model
     protected $fillable = [
         'body', 'user_id',
     ];
+    
+    protected $with = ['owner', 'favorites'];
 
     /**
      * RELATIONSHIPS
@@ -40,26 +43,4 @@ class Reply extends Model
         return $this->belongsTo(Thread::class);
     }
 	
-	/**
-	 * The favorited replies
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-	 */
-    public function favorites()
-    {
-    	return $this->morphMany(Favorite::class, 'favorited');
-    }
-	
-	/*
-	 * Favorite a reply
-	 */
-    public function favorite()
-    {
-    	$attributes = ['user_id' => auth()->id()];
-    	
-    	if(!$this->favorites()->where($attributes)->exists())
-    	{
-		    return $this->favorites()->create($attributes);
-	    }
-    }
 }
