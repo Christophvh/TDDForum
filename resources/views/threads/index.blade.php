@@ -10,11 +10,16 @@
                     <div class="panel-body">
                         @foreach($threads as $thread)
                             <article>
-                                <h4>
-                                    <a href="{{action('ThreadsController@show', [$thread->channel->slug,$thread->id])}}">
-                                        {{$thread->title}}
+                                <div class="level">
+                                    <h4 class="flex">
+                                        <a href="{{action('ThreadsController@show', [$thread->channel->slug,$thread->id])}}">
+                                            {{$thread->title}}
+                                        </a>
+                                    </h4>
+                                    <a href="{{ action('ThreadsController@show', [$thread->channel->slug, $thread->id]) }}">
+                                        {{ $thread->replies_count }} {{ str_plural('reply', $thread->replies_count) }}
                                     </a>
-                                </h4>
+                                </div>
                                 <div class="body">{{$thread->body}}</div>
                             </article>
                             <hr>

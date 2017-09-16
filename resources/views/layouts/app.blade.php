@@ -19,6 +19,18 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+    <style>
+        body {
+            padding-bottom: 100px;
+        }
+        .level {
+            display:flex;
+            align-items: center;
+        }
+        .flex {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
@@ -60,6 +72,12 @@
                                     </a>
                                 </li>
                             @endif
+                            
+                            <li>
+                                <a href="{{ action('ThreadsController@index', ['channel' => null, 'popular' => 1]) }}">
+                                    Most Popular
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>
