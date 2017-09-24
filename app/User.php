@@ -26,6 +26,27 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-
+    
+    /**
+     * Change the route model binding from the user ID to its name
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+    
+    /**
+     *  RELATIONSHIPS
+     *
+     */
+    /**
+     * A user can has many Threads
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class)->latest();
+    }
 }
