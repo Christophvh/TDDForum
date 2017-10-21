@@ -35,6 +35,39 @@ class CreateThreadsTest extends TestCase
 	}
 	
 	/** @test */
+    function guests_cannot_delete_threads()
+    {
+        $this->withExceptionHandling();
+        $thread = create('App\Thread');
+        
+        $response = $this->delete( "threads/{$thread->channel->slug}/{$thread->id}");
+        
+        $response->assertRedirect('/login');
+    }
+	/** @test */
+	function a_thread_can_be_deleted()
+    {
+        $this->signIn();
+        
+        $thread = create('App\Thread');
+        $channel = create('App\Channel');
+        $reply = create('App\Reply', ['thread_id' => $thread->id]);
+        
+        $response = $this->json('DELETE',"threads/{$channel->slug}/{$thread->id}");
+        
+        $response->assertStatus(204);
+        
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+    
+    /** @test */
+    function threads_may_only_be_deleted_by_those_who_have_permission()
+    {
+        // Todo: handle with policies
+    }
+	
+	/** @test */
 	function a_thread_requires_a_title()
 	{
 		$this->publishThread( [ 'title' => null ] )->assertSessionHasErrors( 'title' );
@@ -64,7 +97,7 @@ class CreateThreadsTest extends TestCase
 	 *
 	 * @return \Illuminate\Foundation\Testing\TestResponse
 	 */
-	function publishThread( $overrides = [] )
+	protected function publishThread( $overrides = [] )
 	{
 		$this->withExceptionHandling()->signIn();
 		

@@ -6,8 +6,19 @@
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="{{ action('ProfilesController@show', $thread->creator) }}">{{$thread->creator->name}}</a> posted:
-                        {{$thread->title}}
+                        <div class="level">
+                            <span class="flex">
+                                <a href="{{ action('ProfilesController@show', $thread->creator) }}">
+                                    {{$thread->creator->name}}
+                                </a> posted:
+                                {{$thread->title}}
+                            </span>
+                            <form action="{{ action('ThreadsController@destroy',[$thread->channel, $thread]) }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-link">Delete Thread</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="panel-body">
                         {{$thread->body}}
@@ -37,7 +48,8 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         This thread was published {{ $thread->created_at->diffForHumans() }} by
-                        <a href="{{ action('ProfilesController@show', $thread->creator) }}">{{ $thread->creator->name }}</a>,and currently has
+                        <a href="{{ action('ProfilesController@show', $thread->creator) }}">{{ $thread->creator->name }}</a>,and
+                        currently has
                         {{ $thread->replies_count }} {{ str_plural('comment', $thread->replies_count) }}.
                     </div>
                 </div>
