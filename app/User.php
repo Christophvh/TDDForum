@@ -7,28 +7,33 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    
     use Notifiable;
-
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
-
+    
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
     
     /**
      * Change the route model binding from the user ID to its name
+     *
      * @return string
      */
     public function getRouteKeyName()
@@ -40,6 +45,7 @@ class User extends Authenticatable
      *  RELATIONSHIPS
      *
      */
+    
     /**
      * A user can has many Threads
      *
@@ -48,5 +54,15 @@ class User extends Authenticatable
     public function threads()
     {
         return $this->hasMany(Thread::class)->latest();
+    }
+    
+    /**
+     * Return all activity for the current user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
     }
 }
