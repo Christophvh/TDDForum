@@ -2,15 +2,26 @@
 
 namespace App;
 
+use App\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-	
+    use RecordsActivity;
+    
+    /**
+     * Mass assignable
+     * @var array
+     */
 	protected $fillable = [
 		'title', 'body', 'user_id', 'channel_id',
 	];
-	
+    
+    /**
+     * Eager loading with every tread
+     *
+     * @var array
+     */
 	protected $with = ['creator', 'channel'];
 	
 	
@@ -28,7 +39,9 @@ class Thread extends Model
 		static::deleting(function($thread) {
 		   $thread->replies()->delete();
         });
+        
 	}
+    
 	
 	/**
 	 * RELATIONSHIPS
