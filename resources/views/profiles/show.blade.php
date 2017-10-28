@@ -17,7 +17,7 @@
                             <div class="level">
                         <span class="flex">
                             <a href="{{ action('ProfilesController@show', $profileUser) }}">{{$thread->creator->name}}</a> posted:
-                            {{$thread->title}}
+                            <a href="{{ action('ThreadsController@show', [$thread->channel, $thread]) }}">{{$thread->title}}</a>
                         </span>
                                 <span>
                             {{ $thread->created_at->diffForHumans() }}

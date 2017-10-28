@@ -35,21 +35,23 @@ class CreateThreadsTest extends TestCase
 	}
 	
 	/** @test */
-    function guests_cannot_delete_threads()
+    function unauthorized_users_may_not_delete_threads()
     {
         $this->withExceptionHandling();
         $thread = create('App\Thread');
         
-        $response = $this->delete( "threads/{$thread->channel->slug}/{$thread->id}");
+        $this->delete( "threads/{$thread->channel->slug}/{$thread->id}")->assertRedirect('/login');
         
-        $response->assertRedirect('/login');
+        // A logged in user that doesn't own the thread should nog be able to delete it
+        $this->signIn();
+        $this->delete( "threads/{$thread->channel->slug}/{$thread->id}")->assertStatus(403);
     }
 	/** @test */
-	function a_thread_can_be_deleted()
+	function authorized_users_can_delete_threads()
     {
         $this->signIn();
         
-        $thread = create('App\Thread');
+        $thread = create('App\Thread',['user_id' => auth()->id()]);
         $channel = create('App\Channel');
         $reply = create('App\Reply', ['thread_id' => $thread->id]);
         
@@ -61,12 +63,6 @@ class CreateThreadsTest extends TestCase
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
     
-    /** @test */
-    function threads_may_only_be_deleted_by_those_who_have_permission()
-    {
-        // Todo: handle with policies
-    }
-	
 	/** @test */
 	function a_thread_requires_a_title()
 	{
