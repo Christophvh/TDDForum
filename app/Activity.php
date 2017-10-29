@@ -32,14 +32,17 @@ class Activity extends Model
     /**
      * Return the activity feed for a given user
      *
-     * @param User $user
+     * @param $user
+     *
+     * @param $take
      *
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Relations\HasMany[]|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
      */
-    public static function feed(User $user)
+    public static function feed($user, $take = 50)
     {
-        return $user->activity()->latest()->with('subject')->get()->groupBy(function ($activity) {
-            return $activity->created_at->format('Y-m-d');
-        });
+        return $user->activity()
+                     ->latest()->with('subject')->take($take)->get()->groupBy(function ($activity) {
+                return $activity->created_at->format('Y-m-d');
+            });
     }
 }
